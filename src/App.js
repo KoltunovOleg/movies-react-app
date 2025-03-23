@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Counter from './components/counter/counter';
-import SearchForm from './components/searchform/searchform';
-import GenreSelect from './components/genreselect/genreselect';
+import Counter from './components/Counter/Counter';
+import SearchForm from './components/SearchForm/SearchForm';
+import GenreSelect from './components/GenreSelect/GenreSelect';
+import { genres } from './data/genres';
 
 function App() {
-  const genres = ['All', 'Documentary', 'Comedy', 'Horror', 'Crime'];
   const [selectedGenre, setSelectedGenre] = useState('All');
 
   const handleSearch = (query) => {
@@ -16,22 +16,16 @@ function App() {
     console.log('Selected genre:', genre);
   };
 
-
-  return React.createElement(
-    'div',
-    null,
-    React.createElement(Counter, {
-      initialValue: 0,
-    }),
-    React.createElement(SearchForm, {
-      initialQuery: '',
-      onSearch: handleSearch,
-    }),
-    React.createElement(GenreSelect, {
-      genres: genres,
-      selectedGenre: selectedGenre,
-      onSelect: handleGenreSelect,
-    })
+  return (
+    <div>
+      <Counter initialValue={0} />
+      <SearchForm initialQuery="" onSearch={handleSearch} />
+      <GenreSelect
+        genres={genres}
+        selectedGenre={selectedGenre}
+        onSelect={handleGenreSelect}
+      />
+    </div>
   );
 }
 

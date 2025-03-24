@@ -1,0 +1,30 @@
+@import '../../styles/variables';
+
+.search-form {
+  display: flex;
+  gap: $spacing-medium;
+  margin-bottom: $spacing-large;
+}
+
+.search-form__input {
+  padding: $spacing-medium;
+  font-size: $font-size-medium;
+  border: 1px solid $base-color;
+  background-color: $item-background-color;
+  color: $text-color;
+  border-radius: $border-radius;
+}
+
+.search-form__button {
+  padding: $spacing-medium $spacing-large;
+  font-size: $font-size-medium;
+  background-color: $primary-color;
+  color: $text-color;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+
+  &:hover {
+    background-color: lighten($primary-color, 10%);
+  }
+}

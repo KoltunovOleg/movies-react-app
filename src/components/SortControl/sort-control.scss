@@ -1,0 +1,21 @@
+@import '../../styles/variables';
+
+.sort-control {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .sort-control__label {
+    font-size: 16px;
+    font-weight: bold;
+    color: $text-color;
+  }
+  
+  .sort-control__select {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid $border-color;
+    border-radius: 4px;
+    cursor: pointer;
+  }

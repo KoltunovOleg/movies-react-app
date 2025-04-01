@@ -1,5 +1,5 @@
 import React from 'react';
-import './genreselect.scss';
+import './genre-select.scss';
 
 function GenreSelect({ genres, selectedGenre, onSelect }) {
   const handleSelect = (genre, event) => {

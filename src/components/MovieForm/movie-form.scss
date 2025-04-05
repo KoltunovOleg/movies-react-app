@@ -1,0 +1,51 @@
+@import '../../styles/variables';
+
+.movie-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  
+    &__row {
+      display: flex;
+      gap: 20px;
+      justify-content: space-between;
+  
+      & > .movie-form__group--full {
+        flex: 1;
+      }
+    }
+  
+    &__group {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+  
+      label {
+        font-size: 1rem;
+        font-weight: 400;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        color: $primary-color;
+      }
+  
+      input,
+      textarea,
+      select {
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+      }
+  
+      textarea {
+        resize: vertical;
+      }
+    }
+  
+    &__actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+  }

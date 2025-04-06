@@ -1,17 +1,22 @@
 import React from 'react';
 import Button from '../../shared/Button/Button';
-import { genres } from '../../data/genres';
+import { genres as defaultGenres } from '../../data/genres';
 import './movie-form.scss';
 
-// Import genres array
-// export const genres = ['All', 'Documentary', 'Comedy', 'Horror', 'Crime'];
-
 function MovieForm({ initialMovieInfo = {}, onSubmit }) {
+  console.log('MovieForm initialMovieInfo: ', initialMovieInfo);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.target));
+    // Convert genres back to an array since it will be a comma-separated string
+    formData.genre = formData.genre ? formData.genre.split(',') : [];
     onSubmit?.(formData);
   };
+
+  // Handle genres logic
+  const movieGenres = initialMovieInfo.genres || [];
+  const allGenres = Array.from(new Set([...defaultGenres, ...movieGenres])); // Merge and deduplicate genres
 
   return (
     <form className="movie-form" onSubmit={handleSubmit}>
@@ -42,12 +47,12 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
 
       <div className="movie-form__row">
         <div className="movie-form__group">
-          <label htmlFor="movie_url">Movie URL</label>
+          <label htmlFor="poster_path">Movie URL</label>
           <input
             type="url"
-            id="movie_url"
-            name="movie_url"
-            defaultValue={initialMovieInfo?.movie_url || ''}
+            id="poster_path"
+            name="poster_path"
+            defaultValue={initialMovieInfo?.poster_path || ''}
             placeholder="Enter movie poster URL"
             required
           />
@@ -59,7 +64,7 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
             type="number"
             id="rating"
             name="rating"
-            defaultValue={initialMovieInfo?.rating || ''}
+            defaultValue={initialMovieInfo?.vote_average?.toString() || ''}
             placeholder="Enter movie rating"
             min="0"
             max="10"
@@ -75,16 +80,14 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
           <select
             id="genre"
             name="genre"
-            defaultValue={initialMovieInfo?.genre || ''}
+            defaultValue={movieGenres}
+            multiple
             required
           >
-            <option value="" disabled>
-              Select genre
-            </option>
-            {genres
-              .filter((genre) => genre !== 'All')
+            {allGenres
+              .filter((genre) => genre !== 'All') // Exclude the "All" option
               .map((genre) => (
-                <option key={genre} value={genre}>
+                <option key={genre} value={genre} selected={movieGenres.includes(genre)}>
                   {genre}
                 </option>
               ))}
@@ -97,7 +100,7 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
             type="number"
             id="runtime"
             name="runtime"
-            defaultValue={initialMovieInfo?.runtime || ''}
+            defaultValue={initialMovieInfo?.runtime?.toString() || ''}
             placeholder="Enter runtime in minutes"
             required
           />
@@ -126,7 +129,7 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
         <Button
           text="Submit"
           className="primary"
-          onClick={() => {}}
+          type="submit"
         />
       </div>
     </form>

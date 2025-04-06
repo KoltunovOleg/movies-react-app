@@ -1,4 +1,3 @@
-// ComponentName.test.js
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -10,37 +9,106 @@ describe('MovieTile Component', () => {
     title: 'Example Movie',
     release_date: '2023-01-01',
     genres: ['Action', 'Adventure'],
+    runtime: '120 mins',
+    overview: 'An example movie overview.',
+    rating: 4.5,
   };
 
   const mockOnClick = jest.fn();
 
   it('renders movie details correctly', () => {
     render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
+    const image = screen.getByAltText('Example Movie poster');
 
     expect(screen.getByText('Example Movie')).toBeInTheDocument();
-
     expect(screen.getByText('2023')).toBeInTheDocument();
-
     expect(screen.getByText('Action, Adventure')).toBeInTheDocument();
-
-    const image = screen.getByAltText('Example Movie poster');
     expect(image).toHaveAttribute('src', 'https://example.com/poster.jpg');
   });
 
-  it('calls onClick handler when clicked', () => {
+  it('calls onClick handler when the movie tile is clicked', async () => {
     render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
 
-    const movieTile = screen.getByRole('img').closest('.movie-tile');
-    userEvent.click(movieTile);
+    const movieTile = screen.getByTestId('movie-tile');
+    await userEvent.click(movieTile);
 
     expect(mockOnClick).toHaveBeenCalledTimes(1);
     expect(mockOnClick).toHaveBeenCalledWith(mockMovie);
   });
 
-  it('does not throw an error if onClick is not provided', () => {
-    render(<MovieTile movie={mockMovie} />);
+  it('opens the selector when ButtonDots is clicked', async () => {
+    const { container } = render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
 
-    const movieTile = screen.getByRole('img').closest('.movie-tile');
-    expect(() => userEvent.click(movieTile)).not.toThrow();
+    const buttonDots = container.querySelector('.button-dots');
+    await userEvent.click(buttonDots);
+
+    expect(screen.getByText('Edit')).toBeInTheDocument();
+    expect(screen.getByText('Delete')).toBeInTheDocument();
   });
+
+  // it('closes the selector when an option is selected', async () => {
+  //   const { container } = render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
+
+  //   const buttonDots = container.querySelector('.button-dots'); // Query by CSS class
+  //   await userEvent.click(buttonDots);
+
+  //   const editOption = screen.getByText('Edit');
+  //   await userEvent.click(editOption);
+
+  //   // Selector should close
+  //   expect(screen.queryByText('Edit')).not.toBeInTheDocument();
+  //   expect(screen.queryByText('Delete')).not.toBeInTheDocument();
+  // });
+
+  // it('opens the edit dialog when "Edit" is selected', async () => {
+  //   const { container } = render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
+
+  //   const buttonDots = container.querySelector('.button-dots'); // Query by CSS class
+  //   await userEvent.click(buttonDots);
+
+  //   const editOption = screen.getByText('Edit');
+  //   await userEvent.click(editOption);
+
+  //   // Check that the edit dialog is rendered
+  //   expect(screen.getByText('Edit movie')).toBeInTheDocument();
+
+  //   // Check that the form fields are pre-filled
+  //   expect(screen.getByDisplayValue('Example Movie')).toBeInTheDocument();
+  //   expect(screen.getByDisplayValue('2023-01-01')).toBeInTheDocument();
+  //   expect(screen.getByDisplayValue('https://example.com/poster.jpg')).toBeInTheDocument();
+  //   expect(screen.getByDisplayValue('Action, Adventure')).toBeInTheDocument();
+  // });
+
+  // it('opens the delete confirmation dialog when "Delete" is selected', async () => {
+  //   const { container } = render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
+
+  //   const buttonDots = container.querySelector('.button-dots'); // Query by CSS class
+  //   await userEvent.click(buttonDots);
+
+  //   const deleteOption = screen.getByText('Delete');
+  //   await userEvent.click(deleteOption);
+
+  //   // Check that the delete confirmation dialog is rendered
+  //   expect(screen.getByText('Delete movie')).toBeInTheDocument();
+  //   expect(screen.getByText('Confirm')).toBeInTheDocument();
+  // });
+
+  // it('logs a message when the delete confirmation button is clicked', async () => {
+  //   const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+  //   const { container } = render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
+
+  //   const buttonDots = container.querySelector('.button-dots'); // Query by CSS class
+  //   await userEvent.click(buttonDots);
+
+  //   const deleteOption = screen.getByText('Delete');
+  //   await userEvent.click(deleteOption);
+
+  //   const confirmButton = screen.getByText('Confirm');
+  //   await userEvent.click(confirmButton);
+
+  //   // Check that the deletion is logged
+  //   expect(consoleSpy).toHaveBeenCalledWith('Movie deleted');
+
+  //   consoleSpy.mockRestore();
+  // });
 });

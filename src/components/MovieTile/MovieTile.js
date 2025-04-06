@@ -35,7 +35,7 @@ function MovieTile({ movie, onClick }) {
       ...prevState,
       showDialog: true,
       dialogContent: content,
-      dialogType: type, // Set the dialog type
+      dialogType: type,
     }));
   };
 
@@ -65,7 +65,11 @@ function MovieTile({ movie, onClick }) {
 
 
   return (
-    <div className="movie-tile" onClick={() => onClick?.(movie)}>
+    <div 
+      data-testid="movie-tile"
+      className="movie-tile"
+      onClick={() => onClick?.(movie)}
+    >
       <ButtonDots onClick={showSelector} />
       <img
         className="movie-tile__image"
@@ -93,9 +97,9 @@ function MovieTile({ movie, onClick }) {
               initialMovieInfo={{
                 title: movie.title,
                 release_date: movie.release_date,
-                movie_url: movie.poster_path,
-                rating: movie.rating || '',
-                genre: movie.genres.join(', '),
+                poster_path: movie.poster_path,
+                vote_average: movie.vote_average || '',
+                genres: movie.genres,
                 runtime: movie.runtime || '',
                 overview: movie.overview || '',
               }}

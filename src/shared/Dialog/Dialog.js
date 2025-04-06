@@ -1,11 +1,11 @@
 import React from 'react';
 import { createPortal } from "react-dom";
-import FocusTrap from 'focus-trap-react';
+// import FocusTrap from 'focus-trap-react';
 import './dialog.scss';
 
 function Dialog({ title, children, onClose }) {
   return createPortal(
-    <FocusTrap>
+    <>
       <div 
         className="dialog-overlay"
         onClick={(e) => {
@@ -29,7 +29,7 @@ function Dialog({ title, children, onClose }) {
           <div className="dialog-body">{children}</div>
         </div>
       </div>
-    </FocusTrap>,
+    </>,
     document.getElementById('dialog-root')
   );
 }

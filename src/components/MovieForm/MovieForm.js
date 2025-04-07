@@ -9,13 +9,12 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.target));
-    // Convert genres back to an array since it will be a comma-separated string
     formData.genre = formData.genre ? formData.genre.split(',') : [];
     onSubmit?.(formData);
   };
 
   // Handle genres logic
-  const movieGenres = initialMovieInfo.genres || [];
+  const movieGenres = initialMovieInfo?.genres || [];
   const allGenres = Array.from(new Set([...defaultGenres, ...movieGenres])); // Merge and deduplicate genres
 
   return (

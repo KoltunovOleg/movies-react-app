@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPortal } from "react-dom";
-// import FocusTrap from 'focus-trap-react';
+import FocusTrap from 'focus-trap-react';
 import './dialog.scss';
 
 function Dialog({ title, children, onClose }) {

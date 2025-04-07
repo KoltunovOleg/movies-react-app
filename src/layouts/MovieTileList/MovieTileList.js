@@ -1,4 +1,3 @@
-import React from 'react';
 import './movie-tile-list.scss';
 
 function MovieTileList({ children }) {

@@ -1,4 +1,3 @@
-import React from 'react';
 import './header.scss';
 
 function Header({ backgroundImage, pageTitle, logo, children }) {

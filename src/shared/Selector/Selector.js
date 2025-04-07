@@ -1,4 +1,3 @@
-import React from 'react';
 import './selector.scss';
 
 function Selector({ items, onClose, onSelect }) {

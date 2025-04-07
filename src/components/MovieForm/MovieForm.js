@@ -1,4 +1,3 @@
-import React from 'react';
 import Button from '../../shared/Button/Button';
 import { genres as defaultGenres } from '../../data/genres';
 import './movie-form.scss';

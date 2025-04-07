@@ -1,4 +1,3 @@
-import React from 'react';
 import './button-dots.scss';
 
 function ButtonDots({ onClick }) {

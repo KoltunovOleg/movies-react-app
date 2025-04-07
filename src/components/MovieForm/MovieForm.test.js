@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import MovieForm from './MovieForm';
 import { genres as defaultGenres } from '../../data/genres';
 
@@ -53,7 +54,7 @@ describe('MovieForm Component', () => {
 
   it('calls onSubmit with null when the Reset button is clicked', () => {
     render(<MovieForm onSubmit={mockOnSubmit} />);
-    fireEvent.click(screen.getByRole('button', { name: /Reset/i }));
+    userEvent.click(screen.getByRole('button', { name: /Reset/i }));
     expect(mockOnSubmit).toHaveBeenCalledWith(null);
   });
 });

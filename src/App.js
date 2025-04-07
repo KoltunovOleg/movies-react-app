@@ -71,7 +71,6 @@ function App() {
         <SearchForm initialQuery="" onSearch={handleSearch} />
         <Button text="+Add movie" onClick={handleAddMovie} />
       </Header>
-
       <FilterBar>
         <GenreSelect
           genres={genres}
@@ -88,7 +87,6 @@ function App() {
       {selectedMovie && (
         <MovieDetails movie={selectedMovie} onClose={closeMovieDetails} />
       )}
-      
       {showDialog && (
         <Dialog title='Add Movie' onClose={() => setShowDialog(false)}>
           <MovieForm initialMovieInfo={initialMovieInfo} onSubmit={handleFormSubmit} />

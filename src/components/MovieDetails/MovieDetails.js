@@ -4,10 +4,7 @@ function MovieDetails({ movie, onClose }) {
   const { poster_path, title, release_date, genres, overview, runtime, vote_average } = movie;
 
   return (
-    <div 
-      data-testid="movie-details"
-      className="movie-details"
-    >
+    <div className="movie-details">
       <div className="movie-details__content">
         <button className="movie-details__close" onClick={onClose}>
           &times;

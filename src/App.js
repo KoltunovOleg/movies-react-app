@@ -42,7 +42,6 @@ function App() {
     <div>
       <Counter initialValue={0} />
       <SearchForm initialQuery="" onSearch={handleSearch} />
-
       <FilterBar>
         <GenreSelect
           genres={genres}
@@ -51,13 +50,11 @@ function App() {
         />
         <SortControl currentSelection={sortBy} onSortChange={handleSortChange} />
       </FilterBar>
-
       <MovieTileList>
         {moviesList.data.map((movie) => (
           <MovieTile key={movie.id} movie={movie} onClick={handleMovieClick} />
         ))}
       </MovieTileList>
-
       {selectedMovie && (
         <MovieDetails movie={selectedMovie} onClose={closeMovieDetails} />
       )}

@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import MovieDetails from './MovieDetails';
 
@@ -32,7 +33,7 @@ describe('MovieDetails Component', () => {
     render(<MovieDetails movie={mockMovie} onClose={mockOnClose} />);
 
     const closeButton = screen.getByRole('button', { name: /×/i });
-    fireEvent.click(closeButton);
+    userEvent.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });

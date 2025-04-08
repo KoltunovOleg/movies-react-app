@@ -1,4 +1,3 @@
-import React from 'react';
 import './movie-tile.scss';
 
 function MovieTile({ movie, onClick }) {

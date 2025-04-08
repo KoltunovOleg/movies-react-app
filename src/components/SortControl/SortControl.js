@@ -1,4 +1,3 @@
-import React from 'react';
 import './sort-control.scss';
 
 function SortControl({ currentSelection, onSortChange }) {

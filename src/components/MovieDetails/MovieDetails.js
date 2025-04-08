@@ -1,4 +1,3 @@
-import React from 'react';
 import './movie-details.scss';
 
 function MovieDetails({ movie, onClose }) {

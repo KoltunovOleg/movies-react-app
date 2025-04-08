@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import './search-form.scss';
 
 function SearchForm({ initialQuery = '', onSearch }) {

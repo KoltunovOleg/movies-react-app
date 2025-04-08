@@ -1,6 +1,7 @@
 // ComponentName.test.js
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import MovieTile from './MovieTile';
 
 describe('MovieTile Component', () => {
@@ -30,7 +31,7 @@ describe('MovieTile Component', () => {
     render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
 
     const movieTile = screen.getByRole('img').closest('.movie-tile');
-    fireEvent.click(movieTile);
+    userEvent.click(movieTile);
 
     expect(mockOnClick).toHaveBeenCalledTimes(1);
     expect(mockOnClick).toHaveBeenCalledWith(mockMovie);
@@ -40,6 +41,6 @@ describe('MovieTile Component', () => {
     render(<MovieTile movie={mockMovie} />);
 
     const movieTile = screen.getByRole('img').closest('.movie-tile');
-    expect(() => fireEvent.click(movieTile)).not.toThrow();
+    expect(() => userEvent.click(movieTile)).not.toThrow();
   });
 });

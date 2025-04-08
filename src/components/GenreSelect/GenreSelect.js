@@ -1,4 +1,3 @@
-import React from 'react';
 import './genre-select.scss';
 
 function GenreSelect({ genres, selectedGenre, onSelect }) {

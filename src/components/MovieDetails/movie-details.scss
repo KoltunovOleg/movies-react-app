@@ -1,0 +1,71 @@
+@import '../../styles/variables';
+
+.movie-details {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: $page-background-color;
+  color: $text-color;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.movie-details__content {
+  background-color: $item-background-color;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 800px;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.movie-details__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: $text-color;
+  cursor: pointer;
+}
+
+.movie-details__poster {
+  width: 300px;
+  height: auto;
+  object-fit: cover;
+}
+
+.movie-details__info {
+  padding: 20px;
+  flex: 1;
+}
+
+.movie-details__title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: $text-color;
+}
+
+.movie-details__genres,
+.movie-details__release-date,
+.movie-details__runtime,
+.movie-details__rating {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: $text-color;
+}
+
+.movie-details__overview {
+  margin-top: 16px;
+  font-size: 16px;
+  line-height: 1.5;
+  color: $text-color;
+}

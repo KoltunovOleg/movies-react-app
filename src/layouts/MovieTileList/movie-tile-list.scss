@@ -1,6 +1,6 @@
 .movie-tile-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 40px 30px;
     padding: 16px;
   }

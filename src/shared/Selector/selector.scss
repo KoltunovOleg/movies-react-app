@@ -1,0 +1,40 @@
+@import '../../styles/variables';
+
+.selector {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 190px;
+    background: $item-background-color;
+    color: $text-color;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    padding: 10px 0 0;
+    z-index: 1000; /* Ensure it appears above other elements */
+  }
+  
+  .selector__close {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: $text-color;
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
+  
+  .selector__options {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 0 0;
+  }
+  
+  .selector__option {
+    padding: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .selector__option:hover {
+    background: $selected-color; /* Hover background color */
+  }

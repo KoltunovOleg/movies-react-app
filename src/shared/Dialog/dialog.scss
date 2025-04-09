@@ -1,0 +1,52 @@
+@import '../../styles/variables';
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba($item-background-color, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000
+}
+
+.dialog-container {
+    background-color: $item-background-color;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 976px;
+    width: 100%;
+    padding: 20px;
+    position: relative;
+  }
+  
+  .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .dialog-title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+  
+  .dialog-close-button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: $text-color;
+  }
+  
+  .dialog-body {
+    font-size: 1rem;
+    line-height: 1.5;
+  }

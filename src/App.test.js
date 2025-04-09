@@ -1,8 +1,13 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/count/i);
-  expect(linkElement).toBeInTheDocument();
+describe('App Component', () => {
+  test('renders the header with the correct title and logo', () => {
+    render(<App />);
+    const headerTitle = screen.getByText(/My Movie App/i);
+    const logo = screen.getByAltText(/logo/i);
+
+    expect(headerTitle).toBeInTheDocument();
+    expect(logo).toBeInTheDocument();
+  });
 });

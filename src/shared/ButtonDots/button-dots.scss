@@ -1,0 +1,26 @@
+@import '../../styles/variables';
+
+.button-dots {
+    width: 36px;
+    height: 36px;
+    background: $item-background-color;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .button-dots__dots {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 16px;
+  }
+  
+  .dot {
+    width: 4px;
+    height: 4px;
+    background: $text-color;
+    border-radius: 50%;
+  }

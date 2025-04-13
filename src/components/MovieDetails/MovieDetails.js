@@ -7,7 +7,7 @@ function MovieDetails({ movie, onClose }) {
     <div className="movie-details">
       <div className="movie-details__content">
         <button className="movie-details__close" onClick={onClose}>
-          &times;
+        &#x1F50E;&#xFE0E;
         </button>
         <img
           className="movie-details__poster"

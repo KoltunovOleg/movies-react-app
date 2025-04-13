@@ -1,6 +1,6 @@
 import './genre-select.scss';
 
-function GenreSelect({ genres, selectedGenre, onSelect }) {
+function GenreSelect({ genres, activeGenre, onSelect }) {
   const handleSelect = (genre, event) => {
     event.preventDefault();
       onSelect?.(genre);
@@ -13,7 +13,7 @@ function GenreSelect({ genres, selectedGenre, onSelect }) {
           <a
             href="#"
             className={`genre-select__link ${
-              genre === selectedGenre ? 'selected' : ''
+              genre === activeGenre ? 'selected' : ''
             }`}
             onClick={(e) => handleSelect(genre, e)}
           >

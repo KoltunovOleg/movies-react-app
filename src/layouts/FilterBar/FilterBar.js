@@ -1,4 +1,3 @@
-import React from 'react';
 import './filter-bar.scss';
 
 function FilterBar({ children }) {

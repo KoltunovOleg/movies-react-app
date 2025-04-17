@@ -20,11 +20,12 @@ function App() {
   const [selectedGenre, setSelectedGenre] = useState('All');
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
-  const [initialMovieInfo, setInitialMovieInfo] = useState(null);
+  const [initialMovieInfo, setInitialMovieInfo] = useState({});
   const [sortBy, setSortBy] = useState('releaseDate');
 
-  const handleAddMovie = () => {
-    setInitialMovieInfo(null);
+  const handleAddMovie = (e) => {
+    e.stopPropagation();
+    setInitialMovieInfo({});
     setShowDialog(true);
   };
 

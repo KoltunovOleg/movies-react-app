@@ -1,13 +1,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import Selector from './Selector';
+import DropdownMenu from './DropdownMenu';
 
-describe('Selector Component', () => {
+describe('DropdownMenu Component', () => {
   const mockItems = ['Option 1', 'Option 2', 'Option 3'];
 
-  test('renders the Selector component with items', () => {
-    render(<Selector items={mockItems} />);
+  test('renders the DropdownMenu component with items', () => {
+    render(<DropdownMenu items={mockItems} />);
 
     const options = screen.getAllByRole('listitem');
     expect(options).toHaveLength(mockItems.length);
@@ -19,7 +19,7 @@ describe('Selector Component', () => {
 
   test('calls onClose when the close button is clicked', async () => {
     const onCloseMock = jest.fn();
-    render(<Selector items={mockItems} onClose={onCloseMock} />);
+    render(<DropdownMenu items={mockItems} onClose={onCloseMock} />);
 
     const closeButton = screen.getByRole('button', { name: /×/i });
     await userEvent.click(closeButton);
@@ -29,7 +29,7 @@ describe('Selector Component', () => {
 
   test('calls onSelect with the correct item when an option is clicked', async () => {
     const onSelectMock = jest.fn();
-    render(<Selector items={mockItems} onSelect={onSelectMock} />);
+    render(<DropdownMenu items={mockItems} onSelect={onSelectMock} />);
 
     const options = screen.getAllByRole('listitem');
 
@@ -43,7 +43,7 @@ describe('Selector Component', () => {
 
     const Parent = () => (
       <div onClick={onParentClickMock}>
-        <Selector items={mockItems} />
+        <DropdownMenu items={mockItems} />
       </div>
     );
 

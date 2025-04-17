@@ -1,6 +1,6 @@
 @import '../../styles/variables';
 
-.selector {
+.dropdown {
     position: absolute;
     top: 0;
     right: 0;
@@ -9,10 +9,9 @@
     color: $text-color;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
     padding: 10px 0 0;
-    z-index: 1000; /* Ensure it appears above other elements */
-  }
+    z-index: 1000;
   
-  .selector__close {
+  &__close {
     position: absolute;
     top: 4px;
     right: 8px;
@@ -23,18 +22,20 @@
     cursor: pointer;
   }
   
-  .selector__options {
+  &__options {
     list-style: none;
     padding: 0;
     margin: 16px 0 0 0;
   }
   
-  .selector__option {
+  &__option {
     padding: 8px;
     font-size: 1rem;
     cursor: pointer;
   }
   
-  .selector__option:hover {
-    background: $selected-color; /* Hover background color */
+  &__option:hover {
+    background: $selected-color;
   }
+  
+}

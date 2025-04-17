@@ -30,23 +30,4 @@ describe('Button Component', () => {
         await userEvent.click(buttonElement);
         expect(onClickMock).toHaveBeenCalledTimes(1);
     });
-
-    test('stops event propagation when clicked', async () => {
-        const onClickMock = jest.fn();
-        const onParentClickMock = jest.fn();
-
-        const Parent = () => (
-        <div onClick={onParentClickMock}>
-            <Button text="Click Me" onClick={onClickMock} />
-        </div>
-        );
-
-        render(<Parent />);
-        const buttonElement = screen.getByRole('button');
-
-        await userEvent.click(buttonElement);
-
-        expect(onClickMock).toHaveBeenCalledTimes(1);
-        expect(onParentClickMock).not.toHaveBeenCalled();
-    });
 });

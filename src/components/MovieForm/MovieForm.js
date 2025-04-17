@@ -3,21 +3,23 @@ import { genres as defaultGenres } from '../../data/genres';
 import './movie-form.scss';
 
 function MovieForm({ initialMovieInfo = {}, onSubmit }) {
-  console.log('MovieForm initialMovieInfo: ', initialMovieInfo);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.target));
-    formData.genre = formData.genre ? formData.genre.split(',') : [];
+    const genreSelect = e.target.elements.genre;
+    const selectedGenres = Array.from(genreSelect.selectedOptions).map((option) => option.value);
+    formData.genre = selectedGenres;
     onSubmit?.(formData);
   };
 
   // Handle genres logic
   const movieGenres = initialMovieInfo?.genres || [];
   const allGenres = Array.from(new Set([...defaultGenres, ...movieGenres])); // Merge and deduplicate genres
+  const filteredGenres = allGenres.filter((genre) => genre !== 'All');
 
   return (
-    <form className="movie-form" onSubmit={handleSubmit}>
+    <form className="movie-form" role="form" onSubmit={handleSubmit}>
       <div className="movie-form__row">
         <div className="movie-form__group">
           <label htmlFor="title">Title</label>
@@ -82,13 +84,11 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
             multiple
             required
           >
-            {allGenres
-              .filter((genre) => genre !== 'All') // Exclude the "All" option
-              .map((genre) => (
-                <option key={genre} value={genre} selected={movieGenres.includes(genre)}>
-                  {genre}
-                </option>
-              ))}
+            {filteredGenres.map((genre) => (
+              <option key={genre} value={genre} selected={movieGenres.includes(genre)}>
+                {genre}
+              </option>
+            ))}
           </select>
         </div>
 

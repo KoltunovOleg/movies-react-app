@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MovieForm from './MovieForm';
 import { genres as defaultGenres } from '../../data/genres';
@@ -11,7 +11,7 @@ describe('MovieForm Component', () => {
     mockOnSubmit.mockClear();
   });
 
-  it('renders the form with all fields and default values', () => {
+  test('renders the form with all fields and default values', () => {
     render(<MovieForm onSubmit={mockOnSubmit} />);
     expect(screen.getByLabelText(/Title/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Release Date/i)).toBeInTheDocument();
@@ -28,7 +28,7 @@ describe('MovieForm Component', () => {
     });
   });
 
-  it('fills in the fields with initialMovieInfo values', () => {
+  test('fills in the fields with initialMovieInfo values', () => {
     const initialMovieInfo = {
       title: 'Inception',
       release_date: '2010-07-16',
@@ -52,9 +52,41 @@ describe('MovieForm Component', () => {
     expect(screen.getByRole('option', { name: 'Sci-Fi' }).selected).toBe(true);
   });
 
-  it('calls onSubmit with null when the Reset button is clicked', () => {
+  test('calls onSubmit with null when the Reset button is clicked', () => {
     render(<MovieForm onSubmit={mockOnSubmit} />);
     userEvent.click(screen.getByRole('button', { name: /Reset/i }));
     expect(mockOnSubmit).toHaveBeenCalledWith(null);
+  });
+
+  test('calls onSubmit with form data when the form is submitted', () => {
+    const mockOnSubmit = jest.fn();
+
+    render(
+      <MovieForm
+        initialMovieInfo={{
+          title: 'Inception',
+          release_date: '2010-07-16',
+          poster_path: 'https://example.com/inception.jpg',
+          vote_average: 8.8,
+          genres: ['Action', 'Sci-Fi'],
+          runtime: 148,
+          overview: 'A mind-bending thriller about dreams within dreams.',
+        }}
+        onSubmit={mockOnSubmit}
+      />
+    );
+
+    fireEvent.submit(screen.getByRole('form'));
+
+    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+    expect(mockOnSubmit).toHaveBeenCalledWith({
+      title: 'Inception',
+      release_date: '2010-07-16',
+      poster_path: 'https://example.com/inception.jpg',
+      rating: "8.8",
+      genre: ['Action', 'Sci-Fi'],
+      runtime: "148",
+      overview: 'A mind-bending thriller about dreams within dreams.',
+    });
   });
 });

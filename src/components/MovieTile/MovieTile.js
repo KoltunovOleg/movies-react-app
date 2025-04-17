@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ButtonDots from '../../shared/ButtonDots/ButtonDots';
-import Selector from '../../shared/Selector/Selector';
+import DropdownMenu from '../../shared/DropdownMenu/DropdownMenu';
 import Dialog from '../../shared/Dialog/Dialog';
 import Button from '../../shared/Button/Button';
 import MovieForm from '../MovieForm/MovieForm';
@@ -9,43 +9,24 @@ import './movie-tile.scss';
 function MovieTile({ movie, onClick }) {
   const { poster_path, title, release_date, genres } = movie;
 
-  const [state, setState] = useState({
-    showSelector: false,
-    showDialog: false,
-    dialogContent: '',
-    dialogType: '',
-  });
+  const [showSelector, setShowSelector] = useState(false);
+  const [showDialog, setShowDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState('');
+  const [dialogType, setDialogType] = useState('');
 
-  const showSelector = () => {
-    setState((prevState) => ({
-      ...prevState,
-      showSelector: true,
-    }));
-  };
-
-  const closeSelector = () => {
-    setState((prevState) => ({
-      ...prevState,
-      showSelector: false,
-    }));
-  };
+  const openSelector = () => setShowSelector(true);
+  const closeSelector = () => setShowSelector(false);
 
   const openDialog = (type, content) => {
-    setState((prevState) => ({
-      ...prevState,
-      showDialog: true,
-      dialogContent: content,
-      dialogType: type,
-    }));
+    setDialogType(type);
+    setDialogContent(content);
+    setShowDialog(true);
   };
 
   const closeDialog = () => {
-    setState((prevState) => ({
-      ...prevState,
-      showDialog: false,
-      dialogContent: '',
-      dialogType: '',
-    }));
+    setDialogType('');
+    setDialogContent('');
+    setShowDialog(false);
   };
 
   const handleSelect = (item) => {
@@ -63,14 +44,13 @@ function MovieTile({ movie, onClick }) {
     closeDialog();
   };
 
-
   return (
     <div 
       data-testid="movie-tile"
       className="movie-tile"
       onClick={() => onClick?.(movie)}
     >
-      <ButtonDots onClick={showSelector} />
+      <ButtonDots onClick={openSelector} />
       <img
         className="movie-tile__image"
         src={poster_path}
@@ -81,18 +61,16 @@ function MovieTile({ movie, onClick }) {
         <span className="movie-tile__year">{new Date(release_date).getFullYear()}</span>
         <p className="movie-tile__genres">{genres.join(', ')}</p>
       </div>
-
-      {state.showSelector && (
-        <Selector
+      {showSelector && (
+        <DropdownMenu
           items={['Edit', 'Delete']}
           onClose={closeSelector}
           onSelect={handleSelect}
         />
       )}
-
-      {state.showDialog && (
-        <Dialog title={state.dialogContent} onClose={closeDialog}>
-          {state.dialogType === 'Edit' ? (
+      {showDialog && (
+        <Dialog title={dialogContent} onClose={closeDialog}>
+          {dialogType === 'Edit' ? (
             <MovieForm
               initialMovieInfo={{
                 title: movie.title,
@@ -106,13 +84,13 @@ function MovieTile({ movie, onClick }) {
               onSubmit={handleFormSubmit}
             />
           ) : (
-          <div className="dialog-actions">
-            <Button
-              text="Confirm"
-              className="primary"
-              onClick={() => console.log('Movie deleted')}
-            />
-          </div>
+            <div className="dialog-actions">
+              <Button
+                text="Confirm"
+                className="primary"
+                onClick={() => console.log('Movie deleted')}
+              />
+            </div>
           )}
         </Dialog>
       )}

@@ -10,11 +10,8 @@ function Header({ backgroundImage, pageTitle, logo, children }) {
     >
         <div className="header__logo">
             <img src={logo} alt="Logo" />
-        </div>
-        <div className="header__content">
-            <h1 className="header__title">{pageTitle}</h1>
-            <div className="header__children">{children}</div>
-        </div>
+        </div> 
+        <div className="header__children">{children}</div>
     </header>
   );
 }

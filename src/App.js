@@ -1,5 +1,5 @@
 // import Counter from './components/Counter/Counter';
-import MovieListPage from './components/MovieListPage/MovieListPage'
+import MovieListPage from './components/MovieListPage/MovieListPage';
 
 function App() {
   return (

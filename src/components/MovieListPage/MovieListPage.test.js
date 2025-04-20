@@ -20,14 +20,14 @@ describe('MovieListPage Component', () => {
       document.body.removeChild(dialogRoot);
     }
   });
-  
+
   test('stops event propagation when "+Add movie" button is clicked', async () => {
     render(<MovieListPage />);
 
     const addMovieButton = screen.getByText('+Add movie');
 
-    const event = new MouseEvent("click", { bubbles: true });
-    jest.spyOn(event, "stopPropagation");
+    const event = new MouseEvent('click', { bubbles: true });
+    jest.spyOn(event, 'stopPropagation');
 
     addMovieButton.dispatchEvent(event);
 

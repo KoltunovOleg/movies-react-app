@@ -7,7 +7,13 @@ describe('Header Component', () => {
     const pageTitle = 'My Page';
     const logoSrc = 'logo.png';
     const backgroundImage = 'background.jpg';
-    render(<Header pageTitle={pageTitle} backgroundImage={backgroundImage} logo={logoSrc} />);
+    render(
+      <Header
+        pageTitle={pageTitle}
+        backgroundImage={backgroundImage}
+        logo={logoSrc}
+      />
+    );
 
     const logoImage = screen.getByRole('img', { name: /logo/i });
     expect(logoImage).toBeInTheDocument();
@@ -18,9 +24,17 @@ describe('Header Component', () => {
     const pageTitle = 'My Page';
     const logoSrc = 'logo.png';
     const backgroundImage = 'background.jpg';
-    render(<Header pageTitle={pageTitle} backgroundImage={backgroundImage} logo={logoSrc} />);
-  
+    render(
+      <Header
+        pageTitle={pageTitle}
+        backgroundImage={backgroundImage}
+        logo={logoSrc}
+      />
+    );
+
     const headerElement = screen.getByRole('banner');
-    expect(headerElement).toHaveStyle(`background-image: url(${backgroundImage})`);
+    expect(headerElement).toHaveStyle(
+      `background-image: url(${backgroundImage})`
+    );
   });
 });

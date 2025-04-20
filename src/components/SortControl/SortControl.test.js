@@ -11,7 +11,12 @@ describe('SortControl Component', () => {
   });
 
   it('renders correctly with the current selection', () => {
-    render(<SortControl currentSelection="releaseDate" onSortChange={mockOnSortChange} />);
+    render(
+      <SortControl
+        currentSelection="releaseDate"
+        onSortChange={mockOnSortChange}
+      />
+    );
 
     expect(screen.getByLabelText('Sort by')).toBeInTheDocument();
 
@@ -28,7 +33,12 @@ describe('SortControl Component', () => {
   });
 
   it('calls onSortChange when a new option is selected', () => {
-    render(<SortControl currentSelection="releaseDate" onSortChange={mockOnSortChange} />);
+    render(
+      <SortControl
+        currentSelection="releaseDate"
+        onSortChange={mockOnSortChange}
+      />
+    );
 
     const selectElement = screen.getByRole('combobox');
 

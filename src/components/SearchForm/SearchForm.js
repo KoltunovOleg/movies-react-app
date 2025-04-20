@@ -9,7 +9,7 @@ function SearchForm({ initialQuery = '', onSearch }) {
   };
 
   const handleSearch = () => {
-      onSearch?.(query);
+    onSearch?.(query);
   };
 
   const handleKeyDown = (event) => {
@@ -28,10 +28,7 @@ function SearchForm({ initialQuery = '', onSearch }) {
         onKeyDown={handleKeyDown}
         placeholder="What do you want to watch?"
       />
-      <button
-        className="search-form__button"
-        onClick={handleSearch}
-      >
+      <button className="search-form__button" onClick={handleSearch}>
         Search
       </button>
     </div>

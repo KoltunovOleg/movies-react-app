@@ -20,13 +20,18 @@ describe('MovieDetails Component', () => {
   it('renders movie details correctly', () => {
     render(<MovieDetails movie={mockMovie} onClose={mockOnClose} />);
 
-    expect(screen.getByAltText('Example Movie poster')).toHaveAttribute('src', mockMovie.poster_path);
+    expect(screen.getByAltText('Example Movie poster')).toHaveAttribute(
+      'src',
+      mockMovie.poster_path
+    );
     expect(screen.getByText('Example Movie')).toBeInTheDocument();
     expect(screen.getByText('Action, Adventure')).toBeInTheDocument();
     expect(screen.getByText('Release Date: 2023-01-01')).toBeInTheDocument();
     expect(screen.getByText('Runtime: 120 minutes')).toBeInTheDocument();
     expect(screen.getByText('Rating: 8.5')).toBeInTheDocument();
-    expect(screen.getByText('This is an example movie overview.')).toBeInTheDocument();
+    expect(
+      screen.getByText('This is an example movie overview.')
+    ).toBeInTheDocument();
   });
 
   it('calls onClose when the close button is clicked', () => {

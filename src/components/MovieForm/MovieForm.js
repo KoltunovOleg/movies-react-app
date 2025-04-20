@@ -3,12 +3,13 @@ import { genres as defaultGenres } from '../../data/genres';
 import './movie-form.scss';
 
 function MovieForm({ initialMovieInfo = {}, onSubmit }) {
-
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = Object.fromEntries(new FormData(e.target));
     const genreSelect = e.target.elements.genre;
-    const selectedGenres = Array.from(genreSelect.selectedOptions).map((option) => option.value);
+    const selectedGenres = Array.from(genreSelect.selectedOptions).map(
+      (option) => option.value
+    );
     formData.genre = selectedGenres;
     onSubmit?.(formData);
   };
@@ -85,7 +86,11 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
             required
           >
             {filteredGenres.map((genre) => (
-              <option key={genre} value={genre} selected={movieGenres.includes(genre)}>
+              <option
+                key={genre}
+                value={genre}
+                selected={movieGenres.includes(genre)}
+              >
                 {genre}
               </option>
             ))}
@@ -124,11 +129,7 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
           className="secondary"
           onClick={() => onSubmit?.(null)}
         />
-        <Button
-          text="Submit"
-          className="primary"
-          type="submit"
-        />
+        <Button text="Submit" className="primary" type="submit" />
       </div>
     </form>
   );

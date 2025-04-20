@@ -3,7 +3,7 @@ import './genre-select.scss';
 function GenreSelect({ genres, activeGenre, onSelect }) {
   const handleSelect = (genre, event) => {
     event.preventDefault();
-      onSelect?.(genre);
+    onSelect?.(genre);
   };
 
   return (

@@ -27,7 +27,13 @@ const Template = (args) => {
     args.onSelect(genre);
   };
 
-  return <GenreSelect {...args} selectedGenre={selectedGenre} onSelect={handleSelect} />;
+  return (
+    <GenreSelect
+      {...args}
+      selectedGenre={selectedGenre}
+      onSelect={handleSelect}
+    />
+  );
 };
 
 // Default story

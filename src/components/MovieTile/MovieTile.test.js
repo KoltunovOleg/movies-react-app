@@ -37,7 +37,9 @@ describe('MovieTile Component', () => {
   });
 
   it('opens the selector when ButtonDots is clicked', async () => {
-    const { container } = render(<MovieTile movie={mockMovie} onClick={mockOnClick} />);
+    const { container } = render(
+      <MovieTile movie={mockMovie} onClick={mockOnClick} />
+    );
 
     const buttonDots = container.querySelector('.button-dots');
     await userEvent.click(buttonDots);

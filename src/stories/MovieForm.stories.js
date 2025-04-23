@@ -21,7 +21,8 @@ PrefilledFields.args = {
     vote_average: 8.8,
     genres: ['Comedy', 'Sci-Fi'],
     runtime: 148,
-    overview: 'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.',
+    overview:
+      'A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.',
   },
   onSubmit: (formData) => console.log('Form submitted with: ', formData),
 };

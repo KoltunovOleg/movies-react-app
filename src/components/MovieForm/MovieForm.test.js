@@ -39,14 +39,26 @@ describe('MovieForm Component', () => {
       overview: 'A thief who steals corporate secrets...',
     };
 
-    render(<MovieForm initialMovieInfo={initialMovieInfo} onSubmit={mockOnSubmit} />);
+    render(
+      <MovieForm initialMovieInfo={initialMovieInfo} onSubmit={mockOnSubmit} />
+    );
 
     expect(screen.getByLabelText(/Title/i).value).toBe(initialMovieInfo.title);
-    expect(screen.getByLabelText(/Release Date/i).value).toBe(initialMovieInfo.release_date);
-    expect(screen.getByLabelText(/Movie URL/i).value).toBe(initialMovieInfo.poster_path);
-    expect(screen.getByLabelText(/Rating/i).value).toBe(initialMovieInfo.vote_average.toString());
-    expect(screen.getByLabelText(/Runtime/i).value).toBe(initialMovieInfo.runtime.toString());
-    expect(screen.getByLabelText(/Overview/i).value).toBe(initialMovieInfo.overview);
+    expect(screen.getByLabelText(/Release Date/i).value).toBe(
+      initialMovieInfo.release_date
+    );
+    expect(screen.getByLabelText(/Movie URL/i).value).toBe(
+      initialMovieInfo.poster_path
+    );
+    expect(screen.getByLabelText(/Rating/i).value).toBe(
+      initialMovieInfo.vote_average.toString()
+    );
+    expect(screen.getByLabelText(/Runtime/i).value).toBe(
+      initialMovieInfo.runtime.toString()
+    );
+    expect(screen.getByLabelText(/Overview/i).value).toBe(
+      initialMovieInfo.overview
+    );
 
     expect(screen.getByRole('option', { name: 'Action' }).selected).toBe(true);
     expect(screen.getByRole('option', { name: 'Sci-Fi' }).selected).toBe(true);
@@ -83,9 +95,9 @@ describe('MovieForm Component', () => {
       title: 'Inception',
       release_date: '2010-07-16',
       poster_path: 'https://example.com/inception.jpg',
-      rating: "8.8",
+      rating: '8.8',
       genre: ['Action', 'Sci-Fi'],
-      runtime: "148",
+      runtime: '148',
       overview: 'A mind-bending thriller about dreams within dreams.',
     });
   });

@@ -37,13 +37,11 @@ const DialogWrapper = ({ title, children }) => {
   );
 };
 
-
 export const Default = () => (
   <DialogWrapper title="Default Dialog">
     <p>This is the content of the default dialog.</p>
   </DialogWrapper>
 );
-
 
 export const CustomDialog = () => (
   <DialogWrapper title="Custom Dialog">

@@ -21,8 +21,8 @@ describe('App Component', () => {
 
     const addMovieButton = screen.getByText('+Add movie');
 
-    const event = new MouseEvent("click", { bubbles: true });
-    jest.spyOn(event, "stopPropagation");
+    const event = new MouseEvent('click', { bubbles: true });
+    jest.spyOn(event, 'stopPropagation');
 
     addMovieButton.dispatchEvent(event);
 

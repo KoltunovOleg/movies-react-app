@@ -45,7 +45,7 @@ function MovieTile({ movie, onClick }) {
   };
 
   return (
-    <div 
+    <div
       data-testid="movie-tile"
       className="movie-tile"
       onClick={() => onClick?.(movie)}
@@ -58,7 +58,9 @@ function MovieTile({ movie, onClick }) {
       />
       <div className="movie-tile__info">
         <h3 className="movie-tile__title">{title}</h3>
-        <span className="movie-tile__year">{new Date(release_date).getFullYear()}</span>
+        <span className="movie-tile__year">
+          {new Date(release_date).getFullYear()}
+        </span>
         <p className="movie-tile__genres">{genres.join(', ')}</p>
       </div>
       {showSelector && (

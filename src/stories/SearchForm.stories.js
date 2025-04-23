@@ -31,5 +31,6 @@ PrefilledQuery.args = {
 // Story with a long query
 export const LongQuery = Template.bind({});
 LongQuery.args = {
-  initialQuery: 'A long search query that demonstrates how the input handles larger text',
+  initialQuery:
+    'A long search query that demonstrates how the input handles larger text',
 };

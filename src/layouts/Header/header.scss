@@ -9,13 +9,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     color: $text-color;
     background-color: rgba($item-background-color, 0.95);
     background-blend-mode: overlay;
+
+    &__top {
+        padding: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
   
     &__content {
         width: 100%;
-        max-width: 1200px;
         padding: 20px;
         text-align: center;
 
@@ -33,11 +40,6 @@
     }
   
     &__logo {
-        position: absolute;
-        top: 5px;
-        left: 20px;
-        font-weight: bold;
-    
         img {
             max-width: 100px;
             height: auto;
@@ -46,7 +48,8 @@
     }
   
     &__children {
-        margin-top: 20px;
-        margin-bottom: 20px;
+        width: 100%;
+        height: calc(100% - 55px);
+        overflow-y: auto;
     }
-  }
+}

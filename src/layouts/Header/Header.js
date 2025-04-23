@@ -1,6 +1,6 @@
 import './header.scss';
 
-function Header({ backgroundImage, pageTitle, logo, children }) {
+function Header({ backgroundImage, children, renderActionButton }) {
   return (
     <header
       className="header"
@@ -8,8 +8,11 @@ function Header({ backgroundImage, pageTitle, logo, children }) {
         backgroundImage: `url(${backgroundImage})`,
       }}
     >
-      <div className="header__logo">
-        <img src={logo} alt="Logo" />
+      <div className="header__top">
+        <div className="header__logo">
+          <img src="/logo.png" alt="Logo" />
+        </div>
+        {renderActionButton()}
       </div>
       <div className="header__children">{children}</div>
     </header>

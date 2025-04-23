@@ -11,13 +11,11 @@ import MovieDetails from '../../components/MovieDetails/MovieDetails';
 import Dialog from '../../shared/Dialog/Dialog';
 import Button from '../../shared/Button/Button';
 import { genres } from '../../data/genres';
-import moviesListMock from '../../data/movies.json';
-import Logo from '../../assets/logo.png';
 import BG from '../../assets/bg-header.jpg';
+import { API_URL } from '../../constants';
+import { initialMovieList } from '../../data/movies';
 
 function MovieListPage() {
-  const API_URL = 'http://localhost:4000/movies';
-  const initialMovieList = JSON.parse(JSON.stringify(moviesListMock.data));
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
   const [initialMovieInfo, setInitialMovieInfo] = useState(null);
@@ -72,6 +70,25 @@ function MovieListPage() {
     console.log('Sort by:', value);
   };
 
+  const getHeaderActionButton = () => {
+    console.log('selectedMovie: ', selectedMovie);
+    if (!selectedMovie) {
+      return (
+        <Button
+          text="+Add movie"
+          onClick={handleAddMovie}
+          className="default btn--add"
+        />
+      );
+    } else {
+      return (
+        <button className="movie-details__close" onClick={closeMovieDetails}>
+          &#x1F50E;&#xFE0E;
+        </button>
+      );
+    }
+  };
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -106,17 +123,12 @@ function MovieListPage() {
 
   return (
     <>
-      <Header backgroundImage={BG} logo={Logo}>
+      <Header backgroundImage={BG} renderActionButton={getHeaderActionButton}>
         {selectedMovie ? (
-          <MovieDetails movie={selectedMovie} onClose={closeMovieDetails} />
+          <MovieDetails movie={selectedMovie} />
         ) : (
           <div className="header__content">
             <h1 className="header__title">My Movie App</h1>
-            <Button
-              text="+Add movie"
-              onClick={handleAddMovie}
-              className="default btn--add"
-            />
             <SearchForm initialQuery={searchQuery} onSearch={handleSearch} />
           </div>
         )}

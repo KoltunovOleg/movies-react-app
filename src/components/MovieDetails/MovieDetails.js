@@ -1,6 +1,6 @@
 import './movie-details.scss';
 
-function MovieDetails({ movie, onClose }) {
+function MovieDetails({ movie }) {
   const {
     poster_path,
     title,
@@ -14,9 +14,6 @@ function MovieDetails({ movie, onClose }) {
   return (
     <div className="movie-details">
       <div className="movie-details__content">
-        <button className="movie-details__close" onClick={onClose}>
-          &#x1F50E;&#xFE0E;
-        </button>
         <img
           className="movie-details__poster"
           src={poster_path}

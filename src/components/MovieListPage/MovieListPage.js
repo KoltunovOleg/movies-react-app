@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router';
 import MovieTileList from '../../layouts/MovieTileList/MovieTileList';
 import FilterBar from '../../layouts/FilterBar/FilterBar';
 import Header from '../../layouts/Header/Header';
@@ -16,17 +17,22 @@ import { API_URL } from '../../constants';
 import { initialMovieList } from '../../data/movies';
 
 function MovieListPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
-  const [initialMovieInfo, setInitialMovieInfo] = useState(null);
-  const [sortBy, setSortBy] = useState('releaseDate');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeGenre, setActiveGenre] = useState('All');
+  const [initialMovieInfo, setInitialMovieInfo] = useState({});
+  // const [sortBy, setSortBy] = useState('releaseDate');
+  // const [searchQuery, setSearchQuery] = useState('');
+  // const [activeGenre, setActiveGenre] = useState('All');
   const [movieList, setMovieList] = useState(initialMovieList);
+
+  const searchQuery = searchParams.get('query') || '';
+  const sortBy = searchParams.get('sortBy') || 'releaseDate';
+  const activeGenre = searchParams.get('genre') || 'All';
 
   const handleAddMovie = (e) => {
     e.stopPropagation();
-    setInitialMovieInfo(null);
+    setInitialMovieInfo({});
     setShowDialog(true);
   };
 
@@ -40,7 +46,11 @@ function MovieListPage() {
   };
 
   const handleSearch = (query) => {
-    setSearchQuery(query);
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set('query', query);
+      return newParams;
+    });
 
     const matchedMovie = movieList.find((movie) =>
       movie.title.toLowerCase().includes(query.toLowerCase())
@@ -53,8 +63,11 @@ function MovieListPage() {
   };
 
   const handleGenreSelect = (genre) => {
-    setActiveGenre(genre);
-    console.log('Selected genre:', genre);
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set('genre', genre);
+      return newParams;
+    });
   };
 
   const handleMovieClick = (movie) => {
@@ -66,8 +79,11 @@ function MovieListPage() {
   };
 
   const handleSortChange = (value) => {
-    setSortBy(value);
-    console.log('Sort by:', value);
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set('sortBy', value);
+      return newParams;
+    });
   };
 
   const getHeaderActionButton = () => {

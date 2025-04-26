@@ -1,5 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Router } from 'react-router';
+import { createMemoryHistory } from 'history'; // Import createMemoryHistory
 import '@testing-library/jest-dom';
 import MovieListPage from './MovieListPage';
 import moviesListMock from '../../data/movies.json';
@@ -22,7 +25,12 @@ describe('MovieListPage Component', () => {
   });
 
   test('stops event propagation when "+Add movie" button is clicked', async () => {
-    render(<MovieListPage />);
+    const history = createMemoryHistory();
+    render(
+      <Router location={history.location} navigator={history}>
+        <MovieListPage />
+      </Router>
+    );
 
     const addMovieButton = screen.getByText('+Add movie');
 
@@ -42,7 +50,12 @@ describe('MovieListPage Component', () => {
       }),
     });
 
-    render(<MovieListPage />);
+    const history = createMemoryHistory();
+    render(
+      <Router location={history.location} navigator={history}>
+        <MovieListPage />
+      </Router>
+    );
 
     expect(screen.getByText(/My Movie App/i)).toBeInTheDocument();
 
@@ -52,5 +65,28 @@ describe('MovieListPage Component', () => {
 
     const movieTiles = screen.getAllByTestId('movie-tile');
     expect(movieTiles.length).toBe(moviesListMock.data.length);
+  });
+
+  test('updates search query in the URL when searching', async () => {
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        data: moviesListMock.data,
+      }),
+    });
+
+    const history = createMemoryHistory();
+    render(
+      <Router location={history.location} navigator={history}>
+        <MovieListPage />
+      </Router>
+    );
+
+    const searchInput = screen.getByPlaceholderText('What do you want to watch?');
+    await userEvent.type(searchInput, 'Zootopia{enter}');
+
+    await waitFor(() => {
+      expect(history.location.search).toContain('query=Zootopia'); // Check the query in the history object
+    });
   });
 });

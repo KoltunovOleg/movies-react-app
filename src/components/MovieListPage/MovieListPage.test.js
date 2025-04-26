@@ -31,15 +31,20 @@ describe('MovieListPage Component', () => {
         <MovieListPage />
       </Router>
     );
-
+  
     const addMovieButton = screen.getByText('+Add movie');
-
+  
     const event = new MouseEvent('click', { bubbles: true });
     jest.spyOn(event, 'stopPropagation');
-
+  
     addMovieButton.dispatchEvent(event);
-
+  
     expect(event.stopPropagation).toHaveBeenCalled();
+  
+    // Check if the dialog is displayed
+    await waitFor(() => {
+      expect(screen.getByText('Add Movie')).toBeInTheDocument();
+    });
   });
 
   test('renders the movie list correctly', async () => {
@@ -74,19 +79,27 @@ describe('MovieListPage Component', () => {
         data: moviesListMock.data,
       }),
     });
-
-    const history = createMemoryHistory();
+  
+    const history = createMemoryHistory({ initialEntries: ['/'] }); // Start at the root route
     render(
       <Router location={history.location} navigator={history}>
         <MovieListPage />
       </Router>
     );
 
-    const searchInput = screen.getByPlaceholderText('What do you want to watch?');
+    screen.debug();
+  
+    // Use the correct placeholder text
+    const searchInput = await waitFor(() =>
+      screen.getByPlaceholderText('What do you want to watch?')
+    );
+  
+    // Simulate typing and submitting the search
     await userEvent.type(searchInput, 'Zootopia{enter}');
-
+  
+    // Verify that the query is updated in the URL
     await waitFor(() => {
-      expect(history.location.search).toContain('query=Zootopia'); // Check the query in the history object
+      expect(history.location.search).toContain('query=Zootopia');
     });
   });
 });

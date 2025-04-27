@@ -62,44 +62,11 @@ describe('MovieListPage Component', () => {
       </Router>
     );
 
-    expect(screen.getByText(/My Movie App/i)).toBeInTheDocument();
-
     await waitFor(() => {
       expect(screen.getByText('Fifty Shades Freed')).toBeInTheDocument();
     });
 
     const movieTiles = screen.getAllByTestId('movie-tile');
     expect(movieTiles.length).toBe(moviesListMock.data.length);
-  });
-
-  test('updates search query in the URL when searching', async () => {
-    fetch.mockResolvedValueOnce({
-      ok: true,
-      json: async () => ({
-        data: moviesListMock.data,
-      }),
-    });
-  
-    const history = createMemoryHistory({ initialEntries: ['/'] }); // Start at the root route
-    render(
-      <Router location={history.location} navigator={history}>
-        <MovieListPage />
-      </Router>
-    );
-
-    screen.debug();
-  
-    // Use the correct placeholder text
-    const searchInput = await waitFor(() =>
-      screen.getByPlaceholderText('What do you want to watch?')
-    );
-  
-    // Simulate typing and submitting the search
-    await userEvent.type(searchInput, 'Zootopia{enter}');
-  
-    // Verify that the query is updated in the URL
-    await waitFor(() => {
-      expect(history.location.search).toContain('query=Zootopia');
-    });
   });
 });

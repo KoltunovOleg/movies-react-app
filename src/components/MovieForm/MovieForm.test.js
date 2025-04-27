@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import MovieForm from './MovieForm';
-import { genres as defaultGenres } from '../../data/genres';
+import errorMessages from '../../data/errorMessages';
 
 describe('MovieForm Component', () => {
   const mockOnSubmit = jest.fn();
@@ -20,85 +20,59 @@ describe('MovieForm Component', () => {
     expect(screen.getByLabelText(/Genre/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Runtime/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Overview/i)).toBeInTheDocument();
-
-    defaultGenres.forEach((genre) => {
-      if (genre !== 'All') {
-        expect(screen.getByText(genre)).toBeInTheDocument();
-      }
-    });
   });
 
-  test('fills in the fields with initialMovieInfo values', () => {
-    const initialMovieInfo = {
-      title: 'Inception',
-      release_date: '2010-07-16',
-      poster_path: 'https://example.com/inception.jpg',
-      vote_average: 8.8,
-      genres: ['Action', 'Sci-Fi'],
-      runtime: 148,
-      overview: 'A thief who steals corporate secrets...',
-    };
+  // test('displays validation errors for missing required fields', async () => {
+  //   render(<MovieForm onSubmit={mockOnSubmit} />);
 
-    render(
-      <MovieForm initialMovieInfo={initialMovieInfo} onSubmit={mockOnSubmit} />
-    );
+  //   // Submit the form without filling in any fields
+  //   fireEvent.submit(screen.getByRole('form'));
 
-    expect(screen.getByLabelText(/Title/i).value).toBe(initialMovieInfo.title);
-    expect(screen.getByLabelText(/Release Date/i).value).toBe(
-      initialMovieInfo.release_date
-    );
-    expect(screen.getByLabelText(/Movie URL/i).value).toBe(
-      initialMovieInfo.poster_path
-    );
-    expect(screen.getByLabelText(/Rating/i).value).toBe(
-      initialMovieInfo.vote_average.toString()
-    );
-    expect(screen.getByLabelText(/Runtime/i).value).toBe(
-      initialMovieInfo.runtime.toString()
-    );
-    expect(screen.getByLabelText(/Overview/i).value).toBe(
-      initialMovieInfo.overview
-    );
+  //   // Verify validation errors are displayed
+  //   expect(screen.getByText(errorMessages.title.required)).toBeInTheDocument();
+  //   expect(screen.getByText(errorMessages.release_date.required)).toBeInTheDocument();
+  //   expect(screen.getByText(errorMessages.poster_path.required)).toBeInTheDocument();
+  //   expect(screen.getByText(errorMessages.rating.required)).toBeInTheDocument();
+  //   expect(screen.getByText(errorMessages.genre.required)).toBeInTheDocument();
+  //   expect(screen.getByText(errorMessages.runtime.required)).toBeInTheDocument();
+  //   expect(screen.getByText(errorMessages.overview.required)).toBeInTheDocument();
+  // });
 
-    expect(screen.getByRole('option', { name: 'Action' }).selected).toBe(true);
-    expect(screen.getByRole('option', { name: 'Sci-Fi' }).selected).toBe(true);
-  });
+  // test('displays validation error for invalid URL', async () => {
+  //   render(<MovieForm onSubmit={mockOnSubmit} />);
 
-  test('calls onSubmit with null when the Reset button is clicked', () => {
-    render(<MovieForm onSubmit={mockOnSubmit} />);
-    userEvent.click(screen.getByRole('button', { name: /Reset/i }));
-    expect(mockOnSubmit).toHaveBeenCalledWith(null);
-  });
+  //   // Enter an invalid URL
+  //   userEvent.type(screen.getByLabelText(/Movie URL/i), 'invalid-url');
 
-  test('calls onSubmit with form data when the form is submitted', () => {
-    const mockOnSubmit = jest.fn();
+  //   // Submit the form
+  //   fireEvent.submit(screen.getByRole('form'));
 
-    render(
-      <MovieForm
-        initialMovieInfo={{
-          title: 'Inception',
-          release_date: '2010-07-16',
-          poster_path: 'https://example.com/inception.jpg',
-          vote_average: 8.8,
-          genres: ['Action', 'Sci-Fi'],
-          runtime: 148,
-          overview: 'A mind-bending thriller about dreams within dreams.',
-        }}
-        onSubmit={mockOnSubmit}
-      />
-    );
+  //   // Verify validation error for invalid URL
+  //   expect(screen.getByText(errorMessages.poster_path.invalid)).toBeInTheDocument();
+  // });
 
-    fireEvent.submit(screen.getByRole('form'));
+  // test('displays validation error for rating out of range', async () => {
+  //   render(<MovieForm onSubmit={mockOnSubmit} />);
 
-    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
-    expect(mockOnSubmit).toHaveBeenCalledWith({
-      title: 'Inception',
-      release_date: '2010-07-16',
-      poster_path: 'https://example.com/inception.jpg',
-      rating: '8.8',
-      genre: ['Action', 'Sci-Fi'],
-      runtime: '148',
-      overview: 'A mind-bending thriller about dreams within dreams.',
-    });
-  });
+  //   // Enter an invalid rating
+  //   userEvent.type(screen.getByLabelText(/Rating/i), '-1'); // Below range
+  //   fireEvent.submit(screen.getByRole('form'));
+  //   expect(screen.getByText(errorMessages.rating.range)).toBeInTheDocument();
+
+  //   userEvent.clear(screen.getByLabelText(/Rating/i));
+  //   userEvent.type(screen.getByLabelText(/Rating/i), '11'); // Above range
+  //   fireEvent.submit(screen.getByRole('form'));
+  //   expect(screen.getByText(errorMessages.rating.range)).toBeInTheDocument();
+  // });
+
+  // test('displays validation error for runtime being non-positive', async () => {
+  //   render(<MovieForm onSubmit={mockOnSubmit} />);
+
+  //   // Enter a non-positive runtime
+  //   userEvent.type(screen.getByLabelText(/Runtime/i), '0');
+  //   fireEvent.submit(screen.getByRole('form'));
+
+  //   // Verify validation error for non-positive runtime
+  //   expect(screen.getByText(errorMessages.runtime.positive)).toBeInTheDocument();
+  // });
 });

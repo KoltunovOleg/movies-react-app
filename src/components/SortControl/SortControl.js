@@ -15,8 +15,9 @@ function SortControl({ currentSelection, onSortChange }) {
         className="sort-control__select"
         value={currentSelection}
         onChange={handleChange}
+        role="combobox"
       >
-        <option value="releaseDate">Release Date</option>
+        <option value="release_date">Release Date</option>
         <option value="title">Title</option>
       </select>
     </div>

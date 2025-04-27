@@ -3,6 +3,7 @@ import './button-dots.scss';
 function ButtonDots({ onClick }) {
   return (
     <div
+      role="button"
       className="button-dots"
       onClick={(e) => {
         e.stopPropagation();

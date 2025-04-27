@@ -8,6 +8,6 @@ import { TextEncoder, TextDecoder } from 'util';
 global.TextEncoder = TextEncoder;
 global.TextDecoder = TextDecoder;
 
-jest: {
-  setupFilesAfterEnv: ["./setupTests.js"]
+{
+  ['./setupTests.js'];
 }

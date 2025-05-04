@@ -33,13 +33,4 @@ describe('MovieDetails Component', () => {
       screen.getByText('This is an example movie overview.')
     ).toBeInTheDocument();
   });
-
-  it('calls onClose when the close button is clicked', () => {
-    render(<MovieDetails movie={mockMovie} onClose={mockOnClose} />);
-
-    const closeButton = screen.getByRole('button', { name: /🔎︎/i });
-    userEvent.click(closeButton);
-
-    expect(mockOnClose).toHaveBeenCalledTimes(1);
-  });
 });

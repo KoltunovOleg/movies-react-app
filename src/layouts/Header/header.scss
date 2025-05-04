@@ -3,7 +3,7 @@
 .header {
     position: relative;
     width: 100%;
-    height: 400px;
+    min-height: 400px;
     background-size: cover;
     background-position: center;
     display: flex;
@@ -15,10 +15,13 @@
     background-blend-mode: overlay;
 
     &__top {
+        position: absolute;
+        top: 0;
         padding: 20px;
         width: 100%;
         display: flex;
         justify-content: space-between;
+        z-index: 1;
     }
   
     &__content {
@@ -48,8 +51,10 @@
     }
   
     &__children {
+        // padding-top: 65px;
+        position: relative;
         width: 100%;
-        height: calc(100% - 55px);
+        height: 100%;
         overflow-y: auto;
     }
 }

@@ -1,32 +1,35 @@
+import { Outlet, useParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useState, useEffect } from 'react';
-import MovieTileList from '../../layouts/MovieTileList/MovieTileList';
-import FilterBar from '../../layouts/FilterBar/FilterBar';
 import Header from '../../layouts/Header/Header';
-import MovieTile from '../../components/MovieTile/MovieTile';
-import MovieForm from '../../components/MovieForm/MovieForm';
-import SearchForm from '../../components/SearchForm/SearchForm';
-import SortControl from '../../components/SortControl/SortControl';
+import FilterBar from '../../layouts/FilterBar/FilterBar';
 import GenreSelect from '../../components/GenreSelect/GenreSelect';
-import MovieDetails from '../../components/MovieDetails/MovieDetails';
+import SortControl from '../../components/SortControl/SortControl';
+import MovieTileList from '../../layouts/MovieTileList/MovieTileList';
+import MovieTile from '../../components/MovieTile/MovieTile';
 import Dialog from '../../shared/Dialog/Dialog';
+import MovieForm from '../../components/MovieForm/MovieForm';
 import Button from '../../shared/Button/Button';
 import { genres } from '../../data/genres';
-import BG from '../../assets/bg-header.jpg';
-import { API_URL } from '../../constants';
 import { initialMovieList } from '../../data/movies';
+import { API_URL } from '../../constants';
+import BG from '../../assets/bg-header.jpg';
 
 function MovieListPage() {
-  const [selectedMovie, setSelectedMovie] = useState(null);
-  const [showDialog, setShowDialog] = useState(false);
-  const [initialMovieInfo, setInitialMovieInfo] = useState(null);
-  const [sortBy, setSortBy] = useState('releaseDate');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeGenre, setActiveGenre] = useState('All');
+  const [searchParams, setSearchParams] = useSearchParams();
   const [movieList, setMovieList] = useState(initialMovieList);
+  const [showDialog, setShowDialog] = useState(false);
+  const [initialMovieInfo, setInitialMovieInfo] = useState({});
+  const { movieId } = useParams();
+  const navigate = useNavigate();
+
+  const searchQuery = searchParams.get('query') || '';
+  const sortBy = searchParams.get('sortBy') || 'releaseDate';
+  const activeGenre = searchParams.get('genre') || 'All';
 
   const handleAddMovie = (e) => {
     e.stopPropagation();
-    setInitialMovieInfo(null);
+    setInitialMovieInfo({});
     setShowDialog(true);
   };
 
@@ -39,40 +42,34 @@ function MovieListPage() {
     setShowDialog(false);
   };
 
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-
-    const matchedMovie = movieList.find((movie) =>
-      movie.title.toLowerCase().includes(query.toLowerCase())
-    );
-    if (matchedMovie) {
-      setSelectedMovie(matchedMovie);
-    } else {
-      setSelectedMovie(null);
-    }
-  };
-
   const handleGenreSelect = (genre) => {
-    setActiveGenre(genre);
-    console.log('Selected genre:', genre);
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set('genre', genre);
+      return newParams;
+    });
   };
 
   const handleMovieClick = (movie) => {
-    setSelectedMovie(movie);
+    const params = new URLSearchParams(window.location.search);
+    navigate(`/${movie.id}?${params.toString()}`);
   };
 
   const closeMovieDetails = () => {
-    setSelectedMovie(null);
+    const params = new URLSearchParams(window.location.search);
+    navigate(`/?${params.toString()}`);
   };
 
   const handleSortChange = (value) => {
-    setSortBy(value);
-    console.log('Sort by:', value);
+    setSearchParams((prevParams) => {
+      const newParams = new URLSearchParams(prevParams);
+      newParams.set('sortBy', value);
+      return newParams;
+    });
   };
 
   const getHeaderActionButton = () => {
-    console.log('selectedMovie: ', selectedMovie);
-    if (!selectedMovie) {
+    if (!movieId) {
       return (
         <Button
           text="+Add movie"
@@ -124,14 +121,7 @@ function MovieListPage() {
   return (
     <>
       <Header backgroundImage={BG} renderActionButton={getHeaderActionButton}>
-        {selectedMovie ? (
-          <MovieDetails movie={selectedMovie} />
-        ) : (
-          <div className="header__content">
-            <h1 className="header__title">My Movie App</h1>
-            <SearchForm initialQuery={searchQuery} onSearch={handleSearch} />
-          </div>
-        )}
+        <Outlet />
       </Header>
       <FilterBar>
         <GenreSelect
@@ -146,7 +136,7 @@ function MovieListPage() {
       </FilterBar>
       <MovieTileList>
         {movieList.map((movie) => (
-          <MovieTile key={movie.id} movie={movie} onClick={handleMovieClick} />
+          <MovieTile key={movie.id} movie={movie} onClick={handleMovieClick} data-testid="movie-tile"/>
         ))}
       </MovieTileList>
       {showDialog && (

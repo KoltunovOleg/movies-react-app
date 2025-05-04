@@ -1,5 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Router } from 'react-router';
+import { createMemoryHistory } from 'history'; // Import createMemoryHistory
 import '@testing-library/jest-dom';
 import MovieListPage from './MovieListPage';
 import moviesListMock from '../../data/movies.json';
@@ -22,16 +25,26 @@ describe('MovieListPage Component', () => {
   });
 
   test('stops event propagation when "+Add movie" button is clicked', async () => {
-    render(<MovieListPage />);
-
+    const history = createMemoryHistory();
+    render(
+      <Router location={history.location} navigator={history}>
+        <MovieListPage />
+      </Router>
+    );
+  
     const addMovieButton = screen.getByText('+Add movie');
-
+  
     const event = new MouseEvent('click', { bubbles: true });
     jest.spyOn(event, 'stopPropagation');
-
+  
     addMovieButton.dispatchEvent(event);
-
+  
     expect(event.stopPropagation).toHaveBeenCalled();
+  
+    // Check if the dialog is displayed
+    await waitFor(() => {
+      expect(screen.getByText('Add Movie')).toBeInTheDocument();
+    });
   });
 
   test('renders the movie list correctly', async () => {
@@ -42,9 +55,12 @@ describe('MovieListPage Component', () => {
       }),
     });
 
-    render(<MovieListPage />);
-
-    expect(screen.getByText(/My Movie App/i)).toBeInTheDocument();
+    const history = createMemoryHistory();
+    render(
+      <Router location={history.location} navigator={history}>
+        <MovieListPage />
+      </Router>
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Fifty Shades Freed')).toBeInTheDocument();

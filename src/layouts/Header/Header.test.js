@@ -6,7 +6,10 @@ describe('Header Component', () => {
   test('renders the logo with the correct src', () => {
     const backgroundImage = 'background.jpg';
     render(
-      <Header backgroundImage={backgroundImage} renderActionButton={() => <button>Action</button>} />
+      <Header
+        backgroundImage={backgroundImage}
+        renderActionButton={() => <button>Action</button>}
+      />
     );
 
     const logoImage = screen.getByRole('img', { name: /logo/i });
@@ -17,17 +20,25 @@ describe('Header Component', () => {
   test('applies the background image style correctly', () => {
     const backgroundImage = 'background.jpg';
     render(
-      <Header backgroundImage={backgroundImage} renderActionButton={() => <button>Action</button>} />
+      <Header
+        backgroundImage={backgroundImage}
+        renderActionButton={() => <button>Action</button>}
+      />
     );
 
     const headerElement = screen.getByRole('banner'); // Assuming "banner" is the semantic role for the header
-    expect(headerElement).toHaveStyle(`background-image: url(${backgroundImage})`);
+    expect(headerElement).toHaveStyle(
+      `background-image: url(${backgroundImage})`
+    );
   });
 
   test('renders the action button provided by renderActionButton', () => {
     const backgroundImage = 'background.jpg';
     render(
-      <Header backgroundImage={backgroundImage} renderActionButton={() => <button>Action</button>} />
+      <Header
+        backgroundImage={backgroundImage}
+        renderActionButton={() => <button>Action</button>}
+      />
     );
 
     const actionButton = screen.getByRole('button', { name: /action/i });
@@ -37,7 +48,10 @@ describe('Header Component', () => {
   test('renders children inside the header__children container', () => {
     const backgroundImage = 'background.jpg';
     render(
-      <Header backgroundImage={backgroundImage} renderActionButton={() => <button>Action</button>}>
+      <Header
+        backgroundImage={backgroundImage}
+        renderActionButton={() => <button>Action</button>}
+      >
         <div>Child Content</div>
       </Header>
     );

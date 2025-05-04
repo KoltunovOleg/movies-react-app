@@ -1,9 +1,10 @@
 import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
-import MovieDetails from '../MovieDetails/MovieDetails';
+import Dialog from '../../shared/Dialog/Dialog';
+import MovieForm from '../MovieForm/MovieForm';
 import { API_URL } from '../../constants';
 
-function MovieDetailsWrapper() {
+function EditMovieForm() {
   const { movieId } = useParams();
   const [movie, setMovie] = useState(null);
 
@@ -24,11 +25,11 @@ function MovieDetailsWrapper() {
     fetchMovieDetails();
   }, [movieId]);
 
-  if (!movie) {
-    return <div>Loading...</div>;
-  }
-
-  return <MovieDetails movie={movie} />;
+  return (
+    <Dialog title="Edit Movie" onClose={() => window.history.back()}>
+      <MovieForm initialMovieInfo={movie} movieId={movieId} method={'PUT'} />
+    </Dialog>
+  );
 }
 
-export default MovieDetailsWrapper;
+export default EditMovieForm;

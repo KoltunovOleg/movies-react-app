@@ -1,13 +1,15 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import ButtonDots from '../../shared/ButtonDots/ButtonDots';
 import DropdownMenu from '../../shared/DropdownMenu/DropdownMenu';
 import Dialog from '../../shared/Dialog/Dialog';
 import Button from '../../shared/Button/Button';
-import MovieForm from '../MovieForm/MovieForm';
+// import MovieForm from '../MovieForm/MovieForm';
 import './movie-tile.scss';
 
 function MovieTile({ movie, onClick }) {
-  const { poster_path, title, release_date, genres } = movie;
+  const { poster_path, title, release_date, genres, id } = movie;
+  const navigate = useNavigate();
 
   const [showSelector, setShowSelector] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
@@ -29,19 +31,19 @@ function MovieTile({ movie, onClick }) {
     setShowDialog(false);
   };
 
+  const handleEditNavigate = () => {
+    navigate(`/${id}/edit`);
+    closeDialog();
+  };
+
   const handleSelect = (item) => {
     closeSelector();
 
     if (item === 'Edit') {
-      openDialog('Edit', 'Edit movie');
+      handleEditNavigate();
     } else if (item === 'Delete') {
       openDialog('Delete', 'Delete movie');
     }
-  };
-
-  const handleFormSubmit = (formData) => {
-    console.log('Updated movie data:', formData);
-    closeDialog();
   };
 
   return (
@@ -72,20 +74,7 @@ function MovieTile({ movie, onClick }) {
       )}
       {showDialog && (
         <Dialog title={dialogContent} onClose={closeDialog}>
-          {dialogType === 'Edit' ? (
-            <MovieForm
-              initialMovieInfo={{
-                title: movie.title,
-                release_date: movie.release_date,
-                poster_path: movie.poster_path,
-                vote_average: movie.vote_average || '',
-                genres: movie.genres,
-                runtime: movie.runtime || '',
-                overview: movie.overview || '',
-              }}
-              onSubmit={handleFormSubmit}
-            />
-          ) : (
+          {dialogType !== 'Edit' && (
             <div className="dialog-actions">
               <Button
                 text="Confirm"

@@ -1,8 +1,13 @@
 import './button.scss';
 
-function Button({ text, onClick, className = 'default' }) {
+function Button({ text, onClick, className = 'default', type = 'button' }) {
   return (
-    <button className={`btn btn-${className}`} onClick={onClick}>
+    <button
+      type={type}
+      className={`btn btn-${className}`}
+      onClick={onClick}
+      role="button"
+    >
       {text}
     </button>
   );

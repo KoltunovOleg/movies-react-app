@@ -1,78 +1,137 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { useNavigate } from 'react-router';
 import MovieForm from './MovieForm';
-import errorMessages from '../../data/errorMessages';
+import { API_URL } from '../../constants';
+
+// Mock useNavigate
+jest.mock('react-router', () => ({
+  useNavigate: jest.fn(),
+}));
+
+// Mock fetch
+global.fetch = jest.fn();
 
 describe('MovieForm Component', () => {
-  const mockOnSubmit = jest.fn();
+  let navigateMock;
 
   beforeEach(() => {
-    mockOnSubmit.mockClear();
+    // Mock navigate function
+    navigateMock = jest.fn();
+    useNavigate.mockReturnValue(navigateMock);
+
+    // Add dialog-root to the DOM for portal rendering
+    const dialogRoot = document.createElement('div');
+    dialogRoot.setAttribute('id', 'dialog-root');
+    document.body.appendChild(dialogRoot);
   });
 
-  test('renders the form with all fields and default values', () => {
-    render(<MovieForm onSubmit={mockOnSubmit} />);
-    expect(screen.getByLabelText(/Title/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Release Date/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Movie URL/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Rating/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Genre/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Runtime/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Overview/i)).toBeInTheDocument();
+  afterEach(() => {
+    // Clean up dialog-root
+    const dialogRoot = document.getElementById('dialog-root');
+    if (dialogRoot) {
+      document.body.removeChild(dialogRoot);
+    }
+
+    // Reset mocks
+    jest.clearAllMocks();
   });
 
-  // test('displays validation errors for missing required fields', async () => {
-  //   render(<MovieForm onSubmit={mockOnSubmit} />);
+  it('renders the form with correct initial values', () => {
+    const initialMovieInfo = {
+      title: 'Documentary Film',
+      release_date: '2022-01-01',
+      poster_path: 'https://example.com/poster.jpg',
+      vote_average: 7.5,
+      genres: ['Documentary', 'Crime'],
+      runtime: 120,
+      overview: 'A deep dive into the world of documentaries.',
+    };
 
-  //   // Submit the form without filling in any fields
-  //   fireEvent.submit(screen.getByRole('form'));
+    render(<MovieForm initialMovieInfo={initialMovieInfo} />);
 
-  //   // Verify validation errors are displayed
-  //   expect(screen.getByText(errorMessages.title.required)).toBeInTheDocument();
-  //   expect(screen.getByText(errorMessages.release_date.required)).toBeInTheDocument();
-  //   expect(screen.getByText(errorMessages.poster_path.required)).toBeInTheDocument();
-  //   expect(screen.getByText(errorMessages.rating.required)).toBeInTheDocument();
-  //   expect(screen.getByText(errorMessages.genre.required)).toBeInTheDocument();
-  //   expect(screen.getByText(errorMessages.runtime.required)).toBeInTheDocument();
-  //   expect(screen.getByText(errorMessages.overview.required)).toBeInTheDocument();
-  // });
+    expect(screen.getByLabelText(/title/i)).toHaveValue('Documentary Film');
+    expect(screen.getByLabelText(/release date/i)).toHaveValue('2022-01-01');
+    expect(screen.getByLabelText(/movie url/i)).toHaveValue('https://example.com/poster.jpg');
+    expect(screen.getByLabelText(/rating/i)).toHaveValue(7.5);
+    expect(screen.getByLabelText(/runtime/i)).toHaveValue(120);
+    expect(screen.getByLabelText(/overview/i)).toHaveValue('A deep dive into the world of documentaries.');
 
-  // test('displays validation error for invalid URL', async () => {
-  //   render(<MovieForm onSubmit={mockOnSubmit} />);
+    const genreOptions = screen.getByLabelText(/genre/i).options;
+    expect(Array.from(genreOptions).map((option) => option.value)).not.toContain('All');
+  });
 
-  //   // Enter an invalid URL
-  //   userEvent.type(screen.getByLabelText(/Movie URL/i), 'invalid-url');
+  it('validates required fields and displays error messages', async () => {
+    render(<MovieForm />);
+  
+    fireEvent.click(screen.getByText(/submit/i));
+  
+    await waitFor(() => {
+      expect(screen.getByText(/title is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/release date is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/movie URL is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/rating is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/at least one genre must be selected/i)).toBeInTheDocument();
+      expect(screen.getByText(/runtime is required/i)).toBeInTheDocument();
+      expect(screen.getByText(/overview is required/i)).toBeInTheDocument();
+    });
+  });
 
-  //   // Submit the form
-  //   fireEvent.submit(screen.getByRole('form'));
+  it('submits the form and navigates on success', async () => {
+    const mockResponse = { id: 123 };
+    fetch.mockResolvedValueOnce({
+      ok: true,
+      json: jest.fn().mockResolvedValueOnce(mockResponse),
+    });
 
-  //   // Verify validation error for invalid URL
-  //   expect(screen.getByText(errorMessages.poster_path.invalid)).toBeInTheDocument();
-  // });
+    render(<MovieForm method="POST" />);
 
-  // test('displays validation error for rating out of range', async () => {
-  //   render(<MovieForm onSubmit={mockOnSubmit} />);
+    fireEvent.change(screen.getByLabelText(/title/i), { target: { value: 'Documentary Film' } });
+    fireEvent.change(screen.getByLabelText(/release date/i), { target: { value: '2022-01-01' } });
+    fireEvent.change(screen.getByLabelText(/movie url/i), { target: { value: 'https://example.com/poster.jpg' } });
+    fireEvent.change(screen.getByLabelText(/rating/i), { target: { value: '7.5' } });
+    fireEvent.change(screen.getByLabelText(/runtime/i), { target: { value: '120' } });
+    fireEvent.change(screen.getByLabelText(/overview/i), { target: { value: 'A deep dive into the world of documentaries.' } });
+    fireEvent.change(screen.getByLabelText(/genre/i), { target: { value: 'Documentary' } });
 
-  //   // Enter an invalid rating
-  //   userEvent.type(screen.getByLabelText(/Rating/i), '-1'); // Below range
-  //   fireEvent.submit(screen.getByRole('form'));
-  //   expect(screen.getByText(errorMessages.rating.range)).toBeInTheDocument();
+    fireEvent.click(screen.getByText(/submit/i));
 
-  //   userEvent.clear(screen.getByLabelText(/Rating/i));
-  //   userEvent.type(screen.getByLabelText(/Rating/i), '11'); // Above range
-  //   fireEvent.submit(screen.getByRole('form'));
-  //   expect(screen.getByText(errorMessages.rating.range)).toBeInTheDocument();
-  // });
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(API_URL, expect.any(Object));
+      expect(navigateMock).toHaveBeenCalledWith('/123');
+    });
+  });
 
-  // test('displays validation error for runtime being non-positive', async () => {
-  //   render(<MovieForm onSubmit={mockOnSubmit} />);
+  it('handles API failure gracefully', async () => {
+    fetch.mockResolvedValueOnce({ ok: false });
 
-  //   // Enter a non-positive runtime
-  //   userEvent.type(screen.getByLabelText(/Runtime/i), '0');
-  //   fireEvent.submit(screen.getByRole('form'));
+    render(<MovieForm method="POST" />);
 
-  //   // Verify validation error for non-positive runtime
-  //   expect(screen.getByText(errorMessages.runtime.positive)).toBeInTheDocument();
-  // });
+    fireEvent.change(screen.getByLabelText(/title/i), { target: { value: 'Documentary Film' } });
+    fireEvent.change(screen.getByLabelText(/release date/i), { target: { value: '2022-01-01' } });
+    fireEvent.change(screen.getByLabelText(/movie url/i), { target: { value: 'https://example.com/poster.jpg' } });
+    fireEvent.change(screen.getByLabelText(/rating/i), { target: { value: '7.5' } });
+    fireEvent.change(screen.getByLabelText(/runtime/i), { target: { value: '120' } });
+    fireEvent.change(screen.getByLabelText(/overview/i), { target: { value: 'A deep dive into the world of documentaries.' } });
+    fireEvent.change(screen.getByLabelText(/genre/i), { target: { value: 'Documentary' } });
+
+    fireEvent.click(screen.getByText(/submit/i));
+
+    await waitFor(() => {
+      expect(fetch).toHaveBeenCalledWith(API_URL, expect.any(Object));
+      expect(navigateMock).not.toHaveBeenCalled();
+    });
+  });
+
+  it('resets the form when the reset button is clicked', () => {
+    render(<MovieForm />);
+
+    fireEvent.change(screen.getByLabelText(/title/i), { target: { value: 'Documentary Film' } });
+    fireEvent.change(screen.getByLabelText(/release date/i), { target: { value: '2022-01-01' } });
+
+    fireEvent.click(screen.getByText(/reset/i));
+
+    expect(screen.getByLabelText(/title/i)).toHaveValue('');
+    expect(screen.getByLabelText(/release date/i)).toHaveValue('');
+  });
 });

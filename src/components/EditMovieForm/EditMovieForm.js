@@ -1,13 +1,11 @@
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import { useEffect, useState } from 'react';
 import Dialog from '../../shared/Dialog/Dialog';
 import MovieForm from '../MovieForm/MovieForm';
 import { API_URL } from '../../constants';
-import { handleMovieFormSubmit } from '../../utils/movieFormUtils';
 
 function EditMovieForm() {
   const { movieId } = useParams();
-  const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
@@ -27,18 +25,9 @@ function EditMovieForm() {
     fetchMovieDetails();
   }, [movieId]);
 
-  const handleFormSubmit = (formData) => {
-    handleMovieFormSubmit({
-      formData,
-      method: 'PUT',
-      apiUrl: `${API_URL}`,
-      navigate,
-    });
-  };
-
   return (
     <Dialog title="Edit Movie" onClose={() => window.history.back()}>
-      <MovieForm initialMovieInfo={movie} onSubmit={handleFormSubmit} />
+      <MovieForm initialMovieInfo={movie} movieId={movieId} method={'PUT'} />
     </Dialog>
   );
 }

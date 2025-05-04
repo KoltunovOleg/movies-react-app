@@ -1,11 +1,13 @@
-import React from 'react';
+import { useNavigate } from 'react-router';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import Button from '../../shared/Button/Button';
 import { genres as defaultGenres } from '../../data/genres';
-import errorMessages from '../../data/errorMessages';
+import { API_URL } from '../../constants';
+import { validateMovieForm } from './movieValidator';
 import './movie-form.scss';
 
-function MovieForm({ initialMovieInfo = {}, onSubmit }) {
+function MovieForm({ initialMovieInfo = {}, method = 'POST', movieId = null }) {
+  const navigate = useNavigate();
   // Merge and deduplicate genres
   const movieGenres = initialMovieInfo?.genres || [];
   const allGenres = Array.from(new Set([...defaultGenres, ...movieGenres]));
@@ -21,61 +23,62 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
     overview: initialMovieInfo?.overview || '',
   };
 
-  const validate = (values) => {
-    const errors = {};
-
-    if (!values.title) {
-      errors.title = errorMessages.title.required;
-    }
-
-    if (!values.release_date) {
-      errors.release_date = errorMessages.release_date.required;
-    }
-
-    if (!values.poster_path) {
-      errors.poster_path = errorMessages.poster_path.required;
-    } else if (!/^https?:\/\/.+\..+$/.test(values.poster_path)) {
-      errors.poster_path = errorMessages.poster_path.invalid;
-    }
-
-    if (!values.vote_average) {
-      errors.vote_average = errorMessages.rating.required;
-    } else if (values.vote_average < 0 || values.vote_average > 10) {
-      errors.vote_average = errorMessages.rating.range;
-    }
-
-    if (!values.genres || values.genres.length === 0) {
-      errors.genres = errorMessages.genre.required;
-    }
-
-    if (!values.runtime) {
-      errors.runtime = errorMessages.runtime.required;
-    } else if (values.runtime <= 0) {
-      errors.runtime = errorMessages.runtime.positive;
-    }
-
-    if (!values.overview) {
-      errors.overview = errorMessages.overview.required;
-    }
-
-    return errors;
-  };
-
   const handleSubmit = (values, { setSubmitting, resetForm }) => {
-    console.log('Form submitted:', values);
-    onSubmit?.(values);
+    const formattedValues = {
+      ...values,
+      vote_average: parseFloat(values.vote_average),
+      runtime: parseInt(values.runtime, 10),
+    };
+    handleMovieFormSubmit(formattedValues);
     setSubmitting(false);
     resetForm();
+  };
+
+  const handleMovieFormSubmit = async (formData) => {
+    if (!formData) {
+      navigate('/');
+      return;
+    }
+
+    if (method === 'PUT') {
+      formData.id = Number(movieId);
+    }
+
+    try {
+      const response = await fetch(API_URL, {
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(
+          `Failed to ${method === 'POST' ? 'add' : 'edit'} movie`
+        );
+      }
+
+      const responseData = await response.json();
+
+      if (responseData.id) {
+        navigate(`/${responseData.id}`);
+      } else {
+        console.error('Response does not contain an ID');
+      }
+    } catch (error) {
+      console.error(`Error submitting form (${method}):`, error);
+    }
   };
 
   return (
     <Formik
       initialValues={initialValues}
-      validate={validate}
+      validate={validateMovieForm}
       onSubmit={handleSubmit}
       enableReinitialize
     >
-      {({ isSubmitting }) => (
+      {({ isSubmitting, resetForm }) => (
         <Form className="movie-form" role="form">
           <div className="movie-form__row">
             <div className="movie-form__group">
@@ -127,7 +130,7 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
                 max="10"
                 step="0.1"
               />
-              <ErrorMessage name="rating" component="div" className="error" />
+              <ErrorMessage name="vote_average" component="div" className="error" />
             </div>
           </div>
 
@@ -179,7 +182,10 @@ function MovieForm({ initialMovieInfo = {}, onSubmit }) {
             <Button
               text="Reset"
               className="secondary"
-              onClick={() => onSubmit?.(null)}
+              onClick={(e) => {
+                e.preventDefault();
+                resetForm();
+              }}
             />
             <Button
               text={isSubmitting ? 'Submitting...' : 'Submit'}
